@@ -1,6 +1,6 @@
 # dependencies
 **/node_modules
-
+**package-lock.json
 # misc
 **/.DS_Store
 
@@ -10,3 +10,8 @@
 # production
 **/build
 **/npm-debug.log*
+
+**launch.json
+**settings.json
+
+**yarn.lock

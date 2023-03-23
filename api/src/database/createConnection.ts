@@ -1,9 +1,15 @@
-import { createConnection, Connection } from 'typeorm';
-
+import { DataSource } from 'typeorm';
 import * as entities from 'entities';
 
-const createDatabaseConnection = (): Promise<Connection> =>
-  createConnection({
+const createDatabaseConnection = async (): Promise<DataSource> => {
+  const DBConnected = await createConnection();
+  await DBConnected.initialize();
+  return DBConnected;
+};
+
+// eslint-disable-next-line @typescript-eslint/require-await
+const createConnection = async (): Promise<DataSource> => {
+  const dataSource = new DataSource({
     type: 'postgres',
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
@@ -13,5 +19,18 @@ const createDatabaseConnection = (): Promise<Connection> =>
     entities: Object.values(entities),
     synchronize: true,
   });
-
+  return dataSource;
+};
 export default createDatabaseConnection;
+
+export const dropDatabase = async (): Promise<void> => {
+  const DBConnected = await createConnection();
+  await DBConnected.initialize();
+  await DBConnected.dropDatabase();
+};
+
+// export const synchronizeDatabase = async (): Promise<void> => {
+//   const DBConnected = await createConnection();
+//   await DBConnected.initialize();
+//   await DBConnected.synchronize();
+// };
