@@ -1,9 +1,8 @@
-import { getConnection } from 'typeorm';
+import { dropDatabase } from './createConnection';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const resetDatabase = async (): Promise<void> => {
-  const connection = getConnection();
-  await connection.dropDatabase();
-  await connection.synchronize();
+  dropDatabase();
 };
 
 export default resetDatabase;

@@ -12,9 +12,10 @@ import { RouteNotFoundError } from 'errors';
 
 import { attachPublicRoutes, attachPrivateRoutes } from './routes';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const establishDatabaseConnection = async (): Promise<void> => {
   try {
-    await createDatabaseConnection();
+    createDatabaseConnection();
   } catch (error) {
     console.log(error);
   }
@@ -31,14 +32,16 @@ const initializeExpress = (): void => {
 
   attachPublicRoutes(app);
 
-  app.use('/', authenticateUser);
+  app.use(authenticateUser);
 
   attachPrivateRoutes(app);
 
   app.use((req, _res, next) => next(new RouteNotFoundError(req.originalUrl)));
   app.use(handleError);
 
-  app.listen(process.env.PORT || 3000);
+  app.listen(process.env.PORT || 3000, () => {
+    console.log('server is listening');
+  });
 };
 
 const initializeApp = async (): Promise<void> => {
